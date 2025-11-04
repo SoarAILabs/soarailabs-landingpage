@@ -1,7 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Footer from "@/components/footer";
 import {
   ArrowRight,
   Code,
@@ -17,27 +21,144 @@ import {
   FileSpreadsheet,
   Brain,
 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+
+const tabValues = ["e-commerce", "saas", "marketing", "enterprise", "startups"];
+const tabLabels = ["E-commerce", "SaaS", "Marketing", "Enterprise", "Startups"];
+
+function LiquidTabs() {
+  const [activeTab, setActiveTab] = useState("e-commerce");
+  const [previousTab, setPreviousTab] = useState("e-commerce");
+  const [indicatorStyle, setIndicatorStyle] = useState<{
+    left: number;
+    width: number;
+    direction: "left" | "right";
+  }>({ left: 0, width: 0, direction: "right" });
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const tabsListRef = useRef<HTMLDivElement>(null);
+  const triggerRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  useEffect(() => {
+    const updateIndicator = () => {
+      const activeTrigger = triggerRefs.current[activeTab];
+      const tabsList = tabsListRef.current;
+
+      if (!activeTrigger || !tabsList) return;
+
+      const tabsListRect = tabsList.getBoundingClientRect();
+      const triggerRect = activeTrigger.getBoundingClientRect();
+
+      const left = triggerRect.left - tabsListRect.left;
+      const width = triggerRect.width;
+
+      // Determine direction
+      const previousIndex = tabValues.indexOf(previousTab);
+      const currentIndex = tabValues.indexOf(activeTab);
+      const direction =
+        currentIndex > previousIndex
+          ? "right"
+          : currentIndex < previousIndex
+            ? "left"
+            : "right";
+
+      setIndicatorStyle({ left, width, direction });
+
+      // Only animate if tab actually changed
+      if (previousTab !== activeTab) {
+        setIsAnimating(true);
+        setTimeout(() => setIsAnimating(false), 500);
+      }
+    };
+
+    // Small delay to ensure DOM is updated
+    const timeoutId = setTimeout(updateIndicator, 10);
+
+    return () => clearTimeout(timeoutId);
+  }, [activeTab, previousTab]);
+
+  const handleTabChange = (value: string) => {
+    setPreviousTab(activeTab);
+    setActiveTab(value);
+  };
+
+  return (
+    <div className="flex justify-center mb-12">
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="w-full max-w-2xl"
+      >
+        <TabsList
+          ref={tabsListRef}
+          className="relative w-full flex-wrap justify-center h-auto p-1 rounded-md bg-muted/50"
+        >
+          {/* Liquid Indicator */}
+          <div
+            className="absolute h-[calc(100%-8px)] top-1 bg-background shadow-sm rounded-md overflow-hidden"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+              transition:
+                indicatorStyle.direction === "right"
+                  ? "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                  : "left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+            {/* Liquid morphing layers - creates the liquid flow effect */}
+            {/* Right side - starts animating immediately when going right */}
+            <div
+              className="absolute inset-0 bg-background"
+              style={{
+                clipPath:
+                  isAnimating && indicatorStyle.direction === "right"
+                    ? "polygon(60% 0%, 100% 0%, 100% 100%, 60% 100%)"
+                    : "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                transition:
+                  indicatorStyle.direction === "right"
+                    ? "clip-path 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                    : "clip-path 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            />
+            {/* Left side - follows with delay when going right */}
+            <div
+              className="absolute inset-0 bg-background"
+              style={{
+                clipPath:
+                  isAnimating && indicatorStyle.direction === "right"
+                    ? "polygon(0% 0%, 60% 0%, 60% 100%, 0% 100%)"
+                    : "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+                transition:
+                  indicatorStyle.direction === "right"
+                    ? "clip-path 0.4s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                    : "clip-path 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            />
+          </div>
+
+          {tabValues.map((value, index) => (
+            <TabsTrigger
+              key={value}
+              ref={(el) => {
+                triggerRefs.current[value] = el;
+              }}
+              value={value}
+              className="relative z-10 rounded-md"
+            >
+              {tabLabels[index]}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+    </div>
+  );
+}
 
 export default function HomePage() {
   return (
     <div className="min-h-screen gradient-bg relative">
       {/* Checkered Pattern Background */}
       <div className="fixed inset-0 checkered-pattern opacity-30" />
-
-      {/* Hero Background Image - extends behind all sections */}
-      <div className="absolute top-0 left-0 right-0 h-[150vh] z-[1] pointer-events-none overflow-hidden">
-        <div className="relative w-full h-full">
-          <Image
-            src="/kitelandingimage.webp"
-            alt=""
-            fill
-            priority
-            aria-hidden="true"
-            className="object-cover object-center"
-            style={{ objectPosition: "center 10%" }}
-          />
-        </div>
-      </div>
 
       {/* Hero Section */}
       <section className="relative z-10 px-6 py-24 text-center min-h-[65vh] md:min-h-[75vh] lg:min-h-[85vh] flex items-center">
@@ -52,19 +173,16 @@ export default function HomePage() {
               alt="YC"
               className="w-4 h-4 ml-1 mr-1"
             />{" "}
-            yet
+            (yet)
           </Badge>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance text-foreground whitespace-nowrap">
-            Soar AI Labs
-          </h1>
-          <h2 className="text-3xl font-bold mb-6 text-balance text-foreground whitespace-nowrap">
+          <p className="text-3xl md:text-5xl font-bold mb-6 text-balance text-foreground whitespace-nowrap">
             Beyond the Conflicts
-          </h2>
-
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
-            The first step towards an invisible version control.
           </p>
+
+          <h2 className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto text-pretty">
+            The first step towards an invisible version control.
+          </h2>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -89,8 +207,8 @@ export default function HomePage() {
       <section className="relative z-10 px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all">
-              <div className="text-3xl font-bold text-accent mb-2">99.9%</div>
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all">
+              <div className="text-3xl font-bold mb-2">99.9%</div>
               <div className="text-sm text-muted-foreground mb-1">
                 uptime guaranteed
               </div>
@@ -99,8 +217,8 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all">
-              <div className="text-3xl font-bold text-accent mb-2">10x</div>
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all">
+              <div className="text-3xl font-bold mb-2">10x</div>
               <div className="text-sm text-muted-foreground mb-1">
                 faster deployment
               </div>
@@ -109,16 +227,16 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all">
-              <div className="text-3xl font-bold text-accent mb-2">500k+</div>
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all">
+              <div className="text-3xl font-bold mb-2">500k+</div>
               <div className="text-sm text-muted-foreground mb-1">
                 developers trust us
               </div>
               <div className="text-xs text-muted-foreground">Growing daily</div>
             </Card>
 
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all">
-              <div className="text-3xl font-bold text-accent mb-2">24/7</div>
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all">
+              <div className="text-3xl font-bold mb-2">24/7</div>
               <div className="text-sm text-muted-foreground mb-1">
                 expert support
               </div>
@@ -138,12 +256,13 @@ export default function HomePage() {
               See it in action
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Watch how teams are transforming their workflow with our platform
+              Watch how developers are transforming their workflow with our
+              tools
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="aspect-video bg-muted rounded-none mb-6 flex items-center justify-center group-hover:bg-muted/80 transition-colors">
                 <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center">
                   <Play className="w-8 h-8 text-accent-foreground ml-1" />
@@ -159,13 +278,13 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="hover:translate-y-0.5 hover:cursor-pointer rounded-none clean-border bg-transparent"
+                className="rounded-none clean-border bg-transparent"
               >
                 Watch Demo
               </Button>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="aspect-video bg-muted rounded-none mb-6 flex items-center justify-center group-hover:bg-muted/80 transition-colors">
                 <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center">
                   <Play className="w-8 h-8 text-accent-foreground ml-1" />
@@ -204,27 +323,11 @@ export default function HomePage() {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
-            <Badge variant="default" className="px-4 py-2 rounded-none">
-              E-commerce
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2 rounded-none">
-              SaaS
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2 rounded-none">
-              Marketing
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2 rounded-none">
-              Enterprise
-            </Badge>
-            <Badge variant="secondary" className="px-4 py-2 rounded-none">
-              Startups
-            </Badge>
-          </div>
+          <LiquidTabs />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             {/* Data Organization Example */}
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 bg-accent/10 rounded-none flex items-center justify-center">
                   <Database className="w-5 h-5 text-accent" />
@@ -270,7 +373,7 @@ export default function HomePage() {
             </Card>
 
             {/* AI Chat Example */}
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 bg-accent/10 rounded-none flex items-center justify-center">
                   <MessageSquare className="w-5 h-5 text-accent" />
@@ -317,7 +420,7 @@ export default function HomePage() {
 
           {/* Additional Use Cases */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <BarChart3 className="w-6 h-6 text-accent" />
               </div>
@@ -333,7 +436,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <FileSpreadsheet className="w-6 h-6 text-accent" />
               </div>
@@ -349,7 +452,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-6 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-6 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Brain className="w-6 h-6 text-accent" />
               </div>
@@ -382,7 +485,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Code className="w-6 h-6 text-accent" />
               </div>
@@ -398,7 +501,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Zap className="w-6 h-6 text-accent" />
               </div>
@@ -414,7 +517,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Shield className="w-6 h-6 text-accent" />
               </div>
@@ -430,7 +533,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Globe className="w-6 h-6 text-accent" />
               </div>
@@ -446,7 +549,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Users className="w-6 h-6 text-accent" />
               </div>
@@ -462,7 +565,7 @@ export default function HomePage() {
               </div>
             </Card>
 
-            <Card className="p-8 bg-card rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
+            <Card className="p-8 bg-card rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 group">
               <div className="w-12 h-12 bg-accent/10 rounded-none flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <Sparkles className="w-6 h-6 text-accent" />
               </div>
@@ -484,7 +587,7 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="relative z-10 px-6 py-24">
         <div className="max-w-4xl mx-auto text-center">
-          <Card className="p-12 bg-card rounded-none clean-border hard-shadow">
+          <Card className="p-12 bg-card rounded-md clean-border hard-shadow">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Ready to build the future?
             </h2>
@@ -513,36 +616,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 px-6 py-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <span className="font-semibold text-lg text-foreground">
-                Soar AI Labs
-              </span>
-            </div>
-
-            <div className="flex items-center gap-8 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">
-                Privacy
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Terms
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Support
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
-                Status
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-8 text-center text-sm text-muted-foreground">
-            © 2025 Soar AI Labs. Built with modern web technologies.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
