@@ -27,10 +27,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#f9fafb] relative">
+    <div className="min-h-screen w-full bg-[#f9fafb] relative -mt-20 pt-20">
       {/* Diagonal Fade Grid Background - Top Left */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #d1d5db 1px, transparent 1px),
@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Diagonal Fade Grid Background - Top Right */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #d1d5db 1px, transparent 1px),
@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Diagonal Fade Bottom Grid Left Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #d1d5db 1px, transparent 1px),
@@ -70,15 +70,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           `,
           backgroundSize: "32px 32px",
           WebkitMaskImage:
-            "radial-gradient(ellipse 60% 60% at 0% 100%, #000 20%, transparent 60%)",
+            "radial-gradient(ellipse 60% 60% at 0% 100%, #000 70%, transparent 100%)",
           maskImage:
-            "radial-gradient(ellipse 60% 60% at 0% 100%, #000 20%, transparent 60%)",
+            "radial-gradient(ellipse 60% 60% at 0% 100%, #000 70%, transparent 100%)",
         }}
       />
 
       {/* Diagonal Fade Bottom Grid Right Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #d1d5db 1px, transparent 1px),
@@ -86,9 +86,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           `,
           backgroundSize: "32px 32px",
           WebkitMaskImage:
-            "radial-gradient(ellipse 60% 60% at 100% 100%, #000 20%, transparent 60%)",
+            "radial-gradient(ellipse 60% 60% at 100% 100%, #000 70%, transparent 100%)",
           maskImage:
-            "radial-gradient(ellipse 60% 60% at 100% 100%, #000 20%, transparent 60%)",
+            "radial-gradient(ellipse 60% 60% at 100% 100%, #000 70%, transparent 100%)",
         }}
       />
 
