@@ -104,7 +104,7 @@ const pricingTiers: PricingTier[] = [
       "Custom deployment options",
     ],
     apiLimit: "Unlimited",
-    cta: "Contact Sales",
+    cta: "Contact us",
     ctaVariant: "outline",
   },
 ];
@@ -114,11 +114,6 @@ const faqs = [
     question: "Do I get access to all models on every tier?",
     answer:
       "Yes! As an open-source company, we believe everyone should have access to all our models (Breeze & Gust) regardless of tier. Pricing is based on usage volume, features, and support level - not model access.",
-  },
-  {
-    question: "Can I fine-tune models myself?",
-    answer:
-      "We handle all fine-tuning ourselves. Enterprise customers can request custom fine-tuning of models tailored to their specific needs. This is part of our service to ensure optimal model performance.",
   },
   {
     question: "What happens if I exceed my API limit?",
@@ -138,7 +133,7 @@ const faqs = [
   {
     question: "Do you offer annual plans?",
     answer:
-      "Currently, we offer monthly billing. Annual plans may be available for Enterprise customers - please contact sales to discuss options.",
+      "Currently, we offer monthly billing. Annual plans may be available for Enterprise customers - please contact us to discuss options.",
   },
 ];
 
@@ -199,76 +194,125 @@ export default function PricingPage() {
 
       {/* Pricing Cards */}
       <section className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pricingTiers.map((tier) => (
-            <Card
-              key={tier.name}
-              className={`relative rounded-none clean-border hard-shadow hard-shadow-hover transition-all duration-300 ${
-                tier.popular
-                  ? "border-2 border-foreground/20 scale-105 md:scale-110"
-                  : ""
-              }`}
-            >
-              {tier.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge
-                    variant="default"
-                    className="rounded-none clean-border px-3 py-1"
-                  >
-                    {tier.badge}
-                  </Badge>
-                </div>
-              )}
-              <CardHeader className="pb-4">
-                <CardTitle className="text-2xl font-bold text-foreground">
-                  {tier.name}
-                </CardTitle>
-                <div className="flex items-baseline gap-2 mt-2">
-                  <span className="text-4xl font-bold text-foreground">
-                    {tier.price}
-                  </span>
-                  {tier.price !== "Custom" && (
-                    <span className="text-muted-foreground">/month</span>
-                  )}
-                </div>
-                <CardDescription className="text-base mt-2">
-                  {tier.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-muted/50 rounded-none p-3 border border-border/50">
-                  <div className="text-sm text-muted-foreground mb-1">
-                    API Requests
-                  </div>
-                  <div className="text-lg font-semibold text-foreground">
-                    {tier.apiLimit}
-                  </div>
-                </div>
-                <ul className="space-y-3">
-                  {tier.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter className="pt-4">
-                <Button
-                  variant={tier.ctaVariant}
-                  size="lg"
-                  className={`w-full rounded-none ${
-                    tier.ctaVariant === "default"
-                      ? "hard-shadow hard-shadow-hover"
-                      : "clean-border bg-transparent"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative pricing-grid">
+          {/* Glow positioned at grid level to be below all cards - Medium screens */}
+          <div
+            className="absolute z-0 glow-base transition-all duration-500 ease-out glow-hover hidden md:block lg:hidden"
+            data-pro-glow
+            style={{
+              left: "calc((100% - 1.5rem) / 2 + 1.5rem - 1.5rem)",
+              top: "-1.5rem",
+              width: "calc((100% - 1.5rem) / 2 + 3rem)",
+              height: "calc(100% + 3rem)",
+              background: "transparent",
+              backgroundImage: `
+                radial-gradient(circle at 50% 50%, rgba(138, 191, 255, 0.7) 0%, rgba(138, 191, 255, 0.6) 15%, rgba(138, 191, 255, 0.45) 30%, rgba(138, 191, 255, 0.35) 45%, rgba(138, 191, 255, 0.25) 58%, rgba(138, 191, 255, 0.15) 70%, rgba(138, 191, 255, 0.08) 82%, transparent 92%)
+              `,
+              WebkitMaskImage:
+                "radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, black 50%, rgba(0,0,0,0.95) 62%, rgba(0,0,0,0.8) 72%, rgba(0,0,0,0.5) 82%, rgba(0,0,0,0.2) 90%, transparent 100%)",
+              maskImage:
+                "radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, black 50%, rgba(0,0,0,0.95) 62%, rgba(0,0,0,0.8) 72%, rgba(0,0,0,0.5) 82%, rgba(0,0,0,0.2) 90%, transparent 100%)",
+              pointerEvents: "none",
+            }}
+          />
+          {/* Glow positioned at grid level to be below all cards - Large screens */}
+          <div
+            className="absolute z-0 glow-base transition-all duration-500 ease-out glow-hover hidden lg:block"
+            data-pro-glow
+            style={{
+              left: "calc((100% - 3 * 1.5rem) / 4 + 1.5rem - 1.5rem)",
+              top: "-1.5rem",
+              width: "calc((100% - 3 * 1.5rem) / 4 + 3rem)",
+              height: "calc(100% + 3rem)",
+              background: "transparent",
+              backgroundImage: `
+                radial-gradient(circle at 50% 50%, rgba(138, 191, 255, 0.7) 0%, rgba(138, 191, 255, 0.6) 15%, rgba(138, 191, 255, 0.45) 30%, rgba(138, 191, 255, 0.35) 45%, rgba(138, 191, 255, 0.25) 58%, rgba(138, 191, 255, 0.15) 70%, rgba(138, 191, 255, 0.08) 82%, transparent 92%)
+              `,
+              WebkitMaskImage:
+                "radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, black 50%, rgba(0,0,0,0.95) 62%, rgba(0,0,0,0.8) 72%, rgba(0,0,0,0.5) 82%, rgba(0,0,0,0.2) 90%, transparent 100%)",
+              maskImage:
+                "radial-gradient(ellipse 75% 75% at 50% 50%, black 0%, black 50%, rgba(0,0,0,0.95) 62%, rgba(0,0,0,0.8) 72%, rgba(0,0,0,0.5) 82%, rgba(0,0,0,0.2) 90%, transparent 100%)",
+              pointerEvents: "none",
+            }}
+          />
+          {pricingTiers.map((tier, index) => {
+            const isPro = tier.name === "Pro";
+            return (
+              <div
+                key={tier.name}
+                className={`relative group z-10 ${
+                  tier.popular ? "scale-105 md:scale-110 glow-trigger" : ""
+                }`}
+              >
+                <Card
+                  className={`relative rounded-md clean-border hard-shadow hard-shadow-hover transition-all duration-300 ${
+                    tier.popular ? "border-2 border-foreground/20" : ""
                   }`}
                 >
-                  {tier.cta}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+                  {tier.popular && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <Badge
+                        variant="default"
+                        className="rounded-none clean-border px-3 py-1"
+                      >
+                        {tier.badge}
+                      </Badge>
+                    </div>
+                  )}
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-2xl font-bold text-foreground">
+                      {tier.name}
+                    </CardTitle>
+                    <div className="flex items-baseline gap-2 mt-2">
+                      <span className="text-4xl font-bold text-foreground">
+                        {tier.price}
+                      </span>
+                      {tier.price !== "Custom" && (
+                        <span className="text-muted-foreground">/month</span>
+                      )}
+                    </div>
+                    <CardDescription className="text-base mt-2">
+                      {tier.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="bg-muted/50 rounded-none p-3 border border-border/50">
+                      <div className="text-sm text-muted-foreground mb-1">
+                        API Requests
+                      </div>
+                      <div className="text-lg font-semibold text-foreground">
+                        {tier.apiLimit}
+                      </div>
+                    </div>
+                    <ul className="space-y-3">
+                      {tier.features.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <Check className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-foreground">
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter className="pt-4">
+                    <Button
+                      variant={tier.ctaVariant}
+                      size="lg"
+                      className={`w-full rounded-none ${
+                        tier.ctaVariant === "default"
+                          ? "hard-shadow hard-shadow-hover"
+                          : "clean-border bg-transparent"
+                      }`}
+                    >
+                      {tier.cta}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -283,7 +327,7 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="bg-card rounded-none clean-border hard-shadow overflow-hidden">
+        <div className="bg-card rounded-md clean-border hard-shadow overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -311,16 +355,16 @@ export default function PricingPage() {
                     Access to Breeze & Gust models
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6 bg-accent/5">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
                 <tr className="border-b border-border/50">
@@ -346,13 +390,13 @@ export default function PricingPage() {
                   </td>
                   <td className="text-center p-6">—</td>
                   <td className="text-center p-6 bg-accent/5">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
                 <tr className="border-b border-border/50">
@@ -361,13 +405,13 @@ export default function PricingPage() {
                   </td>
                   <td className="text-center p-6">—</td>
                   <td className="text-center p-6 bg-accent/5">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
                 <tr className="border-b border-border/50">
@@ -377,10 +421,10 @@ export default function PricingPage() {
                   <td className="text-center p-6">—</td>
                   <td className="text-center p-6 bg-accent/5">—</td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
                 <tr className="border-b border-border/50">
@@ -390,21 +434,10 @@ export default function PricingPage() {
                   <td className="text-center p-6">—</td>
                   <td className="text-center p-6 bg-accent/5">—</td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
-                  </td>
-                </tr>
-                <tr className="border-b border-border/50">
-                  <td className="p-6 text-foreground font-medium">
-                    Custom fine-tuning
-                  </td>
-                  <td className="text-center p-6">—</td>
-                  <td className="text-center p-6 bg-accent/5">—</td>
-                  <td className="text-center p-6">—</td>
-                  <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
                 <tr>
@@ -415,7 +448,7 @@ export default function PricingPage() {
                   <td className="text-center p-6 bg-accent/5">—</td>
                   <td className="text-center p-6">—</td>
                   <td className="text-center p-6">
-                    <Check className="w-5 h-5 text-accent mx-auto" />
+                    <Check className="w-5 h-5 text-muted-foreground mx-auto" />
                   </td>
                 </tr>
               </tbody>
@@ -441,7 +474,7 @@ export default function PricingPage() {
             <AccordionItem
               key={index}
               value={`item-${index}`}
-              className="bg-card rounded-none clean-border hard-shadow px-6"
+              className="bg-card rounded-md clean-border hard-shadow px-6"
             >
               <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline">
                 {faq.question}
@@ -456,7 +489,7 @@ export default function PricingPage() {
 
       {/* CTA Section */}
       <section className="max-w-4xl mx-auto px-6 py-20 text-center relative z-10">
-        <Card className="p-12 bg-card rounded-none clean-border hard-shadow">
+        <Card className="p-12 bg-card rounded-md clean-border hard-shadow">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Ready to get started?
           </h2>
@@ -477,7 +510,7 @@ export default function PricingPage() {
               size="lg"
               className="rounded-none clean-border bg-transparent"
             >
-              Contact Sales
+              Contact us
             </Button>
           </div>
         </Card>
