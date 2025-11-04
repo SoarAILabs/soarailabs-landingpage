@@ -156,16 +156,27 @@ function LiquidTabs() {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen gradient-bg relative">
+    <div className="min-h-screen gradient-bg relative -mt-20 md:-mt-24 pt-20 md:pt-24">
       {/* Checkered Pattern Background */}
       <div className="fixed inset-0 checkered-pattern opacity-30" />
 
       {/* Hero Section */}
-      <section className="relative z-10 px-6 py-24 text-center min-h-[65vh] md:min-h-[75vh] lg:min-h-[85vh] flex items-center">
-        <div className="max-w-4xl mx-auto">
+      <section className="relative z-10 px-6 py-24 text-center min-h-[85vh] md:min-h-[95vh] lg:min-h-[100vh] flex items-center">
+        {/* Background Image - extends to top of viewport, shows behind navbar */}
+        <div className="absolute -top-20 md:-top-24 left-0 right-0 h-[calc(85vh+5rem)] md:h-[calc(95vh+6rem)] lg:h-[calc(100vh+6rem)] z-0">
+          <Image
+            src="/generated_upscaled.png"
+            alt="Hero background"
+            fill
+            className="object-cover object-top"
+            priority
+            sizes="100vw"
+          />
+        </div>
+        <div className="max-w-4xl mx-auto relative z-10">
           <Badge
             variant="secondary"
-            className="mb-6 rounded-none shadow-md clean-border"
+            className="mb-6 shadow-md clean-border rounded-md"
           >
             Not Backed by
             <img
@@ -187,7 +198,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="rounded-none hard-shadow hard-shadow-hover"
+              className="rounded-md hard-shadow hard-shadow-hover"
             >
               Start Building
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -195,7 +206,7 @@ export default function HomePage() {
             <Button
               variant="outline"
               size="lg"
-              className="rounded-none clean-border bg-transparent"
+              className="rounded-md clean-border bg-transparent"
             >
               View Documentation
             </Button>
