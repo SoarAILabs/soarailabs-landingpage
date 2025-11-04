@@ -78,10 +78,10 @@ const products = [
 
 const ProductsPage = () => {
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] relative">
+    <div className="min-h-screen w-full bg-[#f8fafc] relative -mt-20 pt-20">
       {/* Top Fade Grid Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 h-full z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #e2e8f0 1px, transparent 1px),
@@ -97,7 +97,7 @@ const ProductsPage = () => {
 
       {/* Bottom Fade Grid Background */}
       <div
-        className="absolute inset-0 z-0"
+        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
         style={{
           backgroundImage: `
             linear-gradient(to right, #e2e8f0 1px, transparent 1px),
@@ -105,9 +105,9 @@ const ProductsPage = () => {
           `,
           backgroundSize: "20px 30px",
           WebkitMaskImage:
-            "radial-gradient(ellipse 80% 35% at 50% 100%, #000 30%, transparent 70%)",
+            "linear-gradient(to bottom, #000 0%, #000 90%, rgba(0,0,0,0.7) 95%, rgba(0,0,0,0.3) 98%, transparent 100%)",
           maskImage:
-            "radial-gradient(ellipse 80% 35% at 50% 100%, #000 30%, transparent 70%)",
+            "linear-gradient(to bottom, #000 0%, #000 90%, rgba(0,0,0,0.7) 95%, rgba(0,0,0,0.3) 98%, transparent 100%)",
         }}
       />
 
