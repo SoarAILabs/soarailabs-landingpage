@@ -34,7 +34,7 @@ export default function HomePage() {
         </div>
         <div className="max-w-7xl mx-auto relative z-10">
           <Badge
-            variant="secondary"
+            variant="outline"
             className="mb-6 shadow-md clean-border rounded-md"
           >
             Not Backed by

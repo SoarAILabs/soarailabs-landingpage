@@ -27,11 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body
         className={`${instrumentSans.className} antialiased flex flex-col min-h-screen`}
       >
-        <RootProvider>
+        <RootProvider theme={{ enabled: false }}>
           <ConditionalNavbar />
           <Suspense fallback={null}>{children}</Suspense>
         </RootProvider>

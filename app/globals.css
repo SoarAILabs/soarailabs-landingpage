@@ -4,39 +4,40 @@
 @import "fumadocs-ui/css/preset.css";
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.15 0 0);
-  --card: oklch(0.98 0 0);
-  --card-foreground: oklch(0.15 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0 0);
-  --primary: oklch(0.15 0 0);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.15 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.65 0.12 260);
-  --accent: oklch(0.95 0 0);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  /* Dark gradient theme - Cloud-like, lightweight aesthetic */
+  --background: oklch(0.25 0.08 260); /* #1B264F - Dark navy base */
+  --foreground: oklch(1 0 0); /* #FFFFFF - White text */
+  --card: oklch(0.28 0.09 260); /* Slightly lighter than background for cards */
+  --card-foreground: oklch(1 0 0); /* White text on cards */
+  --popover: oklch(0.28 0.09 260);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.35 0.12 260); /* #274690 - Medium blue for primary actions */
+  --primary-foreground: oklch(1 0 0); /* White text on primary */
+  --secondary: oklch(0.32 0.10 260); /* Lighter variant of primary */
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.30 0.08 260); /* Subtle background for muted elements */
+  --muted-foreground: oklch(0.62 0.01 90); /* #989788 - Muted gray for secondary text */
+  --accent: oklch(0.75 0.12 250); /* #8cc0ff - Light blue for accents */
+  --accent-foreground: oklch(0.25 0.08 260); /* Dark navy text on accent */
+  --destructive: oklch(0.577 0.245 27.325); /* Keep existing destructive color */
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.96 0 0);
-  --ring: oklch(0.6 0 0);
-  --chart-1: oklch(0.95 0 0);
-  --chart-2: oklch(0.95 0 0);
-  --chart-3: oklch(0.65 0.18 280);
-  --chart-4: oklch(0.75 0.15 60);
-  --chart-5: oklch(0.68 0.16 320);
+  --border: oklch(0.35 0.10 260 / 0.3); /* Subtle semi-transparent borders */
+  --input: oklch(0.30 0.08 260); /* Input background */
+  --ring: oklch(0.75 0.12 250); /* Accent color for focus rings */
+  --chart-1: oklch(0.75 0.12 250); /* Light blue */
+  --chart-2: oklch(0.65 0.15 240); /* Variant of light blue */
+  --chart-3: oklch(0.55 0.14 260); /* Medium blue variant */
+  --chart-4: oklch(0.70 0.11 270); /* Another light blue variant */
+  --chart-5: oklch(0.68 0.13 245); /* Additional accent variant */
   --radius: 1rem;
-  --sidebar: oklch(0.98 0 0);
-  --sidebar-foreground: oklch(0.15 0 0);
-  --sidebar-primary: oklch(0.95 0 0);
+  --sidebar: oklch(0.26 0.08 260); /* Slightly lighter than background */
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.35 0.12 260); /* Medium blue */
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.15 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: oklch(0.6 0 0);
+  --sidebar-accent: oklch(0.30 0.08 260);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.35 0.10 260 / 0.3);
+  --sidebar-ring: oklch(0.75 0.12 250);
 }
 
 @theme inline {
@@ -84,25 +85,63 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(to bottom, #1B264F 0%, #274690 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  /* Fumadocs UI theme overrides to match site's dark theme */
+  :root,
+  .dark {
+    --color-fd-background: oklch(0.25 0.08 260); /* Match site background */
+    --color-fd-foreground: oklch(1 0 0); /* White text */
+    --color-fd-muted: oklch(0.30 0.08 260); /* Match site muted */
+    --color-fd-muted-foreground: oklch(0.62 0.01 90); /* Match site muted-foreground */
+    --color-fd-popover: oklch(0.28 0.09 260); /* Match site popover */
+    --color-fd-popover-foreground: oklch(1 0 0); /* White text */
+    --color-fd-card: oklch(0.28 0.09 260); /* Match site card */
+    --color-fd-card-foreground: oklch(1 0 0); /* White text */
+    --color-fd-border: oklch(0.35 0.10 260 / 0.3); /* Match site border */
+    --color-fd-primary: oklch(0.35 0.12 260); /* Match site primary */
+    --color-fd-primary-foreground: oklch(1 0 0); /* White text */
+    --color-fd-secondary: oklch(0.32 0.10 260); /* Match site secondary */
+    --color-fd-secondary-foreground: oklch(1 0 0); /* White text */
+    --color-fd-accent: oklch(0.75 0.12 250); /* Match site accent */
+    --color-fd-accent-foreground: oklch(0.25 0.08 260); /* Dark navy text */
+    --color-fd-ring: oklch(0.75 0.12 250); /* Match site ring */
+  }
+
+  /* Ensure docs pages use the same gradient background */
+  body:has([data-fd-docs]) {
+    background: linear-gradient(to bottom, #1B264F 0%, #274690 100%);
+    background-attachment: fixed;
+  }
+
+  /* Hide theme toggle button in fumadocs sidebar */
+  [data-fd-theme-toggle],
+  button[aria-label*="theme"],
+  button[aria-label*="Theme"] {
+    display: none !important;
   }
 }
 
 .gradient-bg {
-  background: linear-gradient(to top, rgb(138, 191, 255) 0%, rgba(138, 191, 255, 0.9) 15%, rgba(138, 191, 255, 0.7) 30%, rgba(138, 191, 255, 0.5) 45%, rgba(138, 191, 255, 0.3) 60%, rgba(255, 255, 255, 0.7) 75%, rgba(255, 255, 255, 0.9) 90%, #ffffff 100%);
+  background: linear-gradient(to bottom, #1B264F 0%, #274690 100%);
+  background-attachment: fixed;
 }
 
 .hard-shadow {
-  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.3);
 }
 
 .hard-shadow-hover:hover {
-  box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 0 0 rgba(0, 0, 0, 0.4);
   transform: translateY(-2px);
 }
 
 .clean-border {
-  border: 2px solid rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Radial fade utilities for hero image */
@@ -112,7 +151,7 @@
 }
 
 .radial-bottom-overlay {
-  background: radial-gradient(120% 85% at 50% 100%, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.7) 85%);
+  background: radial-gradient(120% 85% at 50% 100%, rgba(27, 38, 79, 0) 0%, rgba(27, 38, 79, 0) 35%, rgba(27, 38, 79, 0.7) 85%);
 }
 
 /* Pro card glow effects */
@@ -124,15 +163,15 @@
 .pricing-grid:has(.glow-trigger:hover) [data-pro-glow] {
   background-image: radial-gradient(
     circle at 50% 50%,
-    rgba(138, 191, 255, 1) 0%,
-    rgba(138, 191, 255, 0.95) 12%,
-    rgba(138, 191, 255, 0.85) 22%,
-    rgba(138, 191, 255, 0.7) 35%,
-    rgba(138, 191, 255, 0.55) 48%,
-    rgba(138, 191, 255, 0.42) 60%,
-    rgba(138, 191, 255, 0.3) 72%,
-    rgba(138, 191, 255, 0.2) 82%,
-    rgba(138, 191, 255, 0.12) 90%,
+    rgba(140, 192, 255, 0.8) 0%,
+    rgba(140, 192, 255, 0.75) 12%,
+    rgba(140, 192, 255, 0.65) 22%,
+    rgba(140, 192, 255, 0.5) 35%,
+    rgba(140, 192, 255, 0.4) 48%,
+    rgba(140, 192, 255, 0.3) 60%,
+    rgba(140, 192, 255, 0.2) 72%,
+    rgba(140, 192, 255, 0.15) 82%,
+    rgba(140, 192, 255, 0.1) 90%,
     transparent 96%
   ) !important;
 }

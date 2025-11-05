@@ -18,7 +18,7 @@ export function Navbar() {
           <span className="font-semibold text-lg text-foreground">
             <Link
               href="/"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="text-foreground hover:text-accent transition-colors"
             >
               Soar AI Labs
             </Link>
@@ -31,7 +31,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/products"
-                  className="text-muted-foreground hover:text-foreground transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
                 >
                   Products
                 </Link>
@@ -41,7 +41,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/pricing"
-                  className="text-muted-foreground hover:text-foreground transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
                 >
                   Pricing
                 </Link>
@@ -51,7 +51,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/docs"
-                  className="text-muted-foreground hover:text-foreground transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
                 >
                   Docs
                 </Link>
@@ -61,7 +61,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/blog"
-                  className="text-muted-foreground hover:text-foreground transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
                 >
                   Blog
                 </Link>
