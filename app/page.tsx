@@ -4,23 +4,8 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Footer from "@/components/footer";
-import {
-  ArrowRight,
-  Code,
-  Zap,
-  Shield,
-  Globe,
-  Users,
-  Sparkles,
-  Play,
-  Database,
-  MessageSquare,
-  BarChart3,
-  FileSpreadsheet,
-  Brain,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -39,6 +24,12 @@ export default function HomePage() {
             className="object-cover object-top"
             priority
             sizes="100vw"
+            style={{
+              maskImage:
+                "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)",
+            }}
           />
         </div>
         <div className="max-w-7xl mx-auto relative z-10">
