@@ -4,6 +4,7 @@ import { Inter, Instrument_Sans } from "next/font/google";
 import { Suspense } from "react";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import { ConditionalNavbar } from "@/components/conditional-navbar";
+import Footer from "@/components/footer";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,11 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="dark">
       <body
-        className={`${instrumentSans.className} antialiased flex flex-col min-h-screen`}
+        className={`${instrumentSans.className} antialiased flex flex-col min-h-screen gradient-bg`}
       >
         <RootProvider theme={{ enabled: false }}>
           <ConditionalNavbar />
           <Suspense fallback={null}>{children}</Suspense>
+          <Footer />
         </RootProvider>
       </body>
     </html>
