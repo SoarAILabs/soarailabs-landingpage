@@ -4,15 +4,12 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import Footer from "@/components/footer";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen gradient-bg relative -mt-20 md:-mt-24 pt-20 md:pt-24">
-      {/* Checkered Pattern Background */}
-      <div className="fixed inset-0 checkered-pattern opacity-30" />
+    <div className="min-h-screen relative -mt-20 md:-mt-24 pt-20 md:pt-24">
       {/* Hero Section */}
       <section className="relative z-10 px-6 pt-32 md:pt-40 lg:pt-48 pb-12 text-center min-h-[85vh] md:min-h-[95vh] lg:min-h-[100vh] flex items-start">
         {/* Background Image - extends to top of viewport, shows behind navbar */}
@@ -102,26 +99,30 @@ export default function HomePage() {
               <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                 But what is Glide?
               </h2>
-              <p className="text-lg text-muted-foreground">
-                Glide is an MCP that focuses on speed & reliability more than
-                anything. Our aim was to fix the age old problems with Git and
-                this MCP does it and it does it{" "}
-                <span className="italic">fast</span>. Currently, it focuses on
-                two major but overlooked problems:
+              <div className="text-lg text-muted-foreground space-y-4">
+                <p>
+                  Glide is an MCP that focuses on speed & reliability more than
+                  anything. Our aim was to fix the age old problems with Git and
+                  this MCP does it and it does it{" "}
+                  <span className="italic">fast</span>. Currently, it focuses on
+                  two major but overlooked problems:
+                </p>
                 <ul className="list-disc list-inside ml-4">
                   <li>Merge conflicts</li>
                   <li>Large and unorganized commit history</li>
                 </ul>
-                <br /> We use semantically understand your codebase to generate
-                a clean and organized commit history and use fine-tuned models
-                to resolve merge conflicts.
-                <br />
-                <br />
-                Read more about how Glide MCP works in our{" "}
-                <span className="underline underline-offset-2 hover:cursor-pointer">
-                  <Link href="/blog/introducing-glide">blog</Link>.{" "}
-                </span>
-              </p>
+                <p>
+                  We use semantically understand your codebase to generate a
+                  clean and organized commit history and use fine-tuned models
+                  to resolve merge conflicts.
+                </p>
+                <p>
+                  Read more about how Glide MCP works in our{" "}
+                  <span className="underline underline-offset-2 hover:cursor-pointer">
+                    <Link href="/blog/introducing-glide">blog</Link>.{" "}
+                  </span>
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
@@ -279,8 +280,6 @@ export default function HomePage() {
           </p>
         </div>
       </section>
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

@@ -139,38 +139,7 @@ const faqs = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen w-full bg-[#f8fafc] relative -mt-20 pt-20">
-      {/* Top Fade Grid Background */}
-      <div
-        className="absolute -top-20 left-0 right-0 h-full z-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #e2e8f0 1px, transparent 1px),
-            linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
-          `,
-          backgroundSize: "20px 30px",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 35% at 50% 0%, #000 30%, transparent 70%)",
-          maskImage:
-            "radial-gradient(ellipse 80% 35% at 50% 0%, #000 30%, transparent 70%)",
-        }}
-      />
-
-      {/* Bottom Fade Grid Background */}
-      <div
-        className="absolute -top-20 left-0 right-0 bottom-0 z-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #e2e8f0 1px, transparent 1px),
-            linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)
-          `,
-          backgroundSize: "20px 30px",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, #000 0%, #000 90%, rgba(0,0,0,0.7) 95%, rgba(0,0,0,0.3) 98%, transparent 100%)",
-          maskImage:
-            "linear-gradient(to bottom, #000 0%, #000 90%, rgba(0,0,0,0.7) 95%, rgba(0,0,0,0.3) 98%, transparent 100%)",
-        }}
-      />
+    <div className="min-h-screen w-full relative -mt-20 pt-20">
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 py-20 md:py-24 relative z-10">

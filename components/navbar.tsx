@@ -12,8 +12,8 @@ import Link from "next/link";
 
 export function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 p-4">
-      <div className="max-w-[80vw] mx-auto flex items-center justify-between backdrop-blur-lg bg-white/10 border border-white/20 rounded-full shadow-lg px-6 py-3">
+    <nav className="sticky top-0 z-50 p-4 bg-gradient-to-b from-blue-500/30 to-transparent">
+      <div className="max-w-[80vw] mx-auto flex items-center justify-between rounded-full px-6 py-3">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-lg text-foreground">
             <Link
@@ -31,7 +31,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/products"
-                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full"
                 >
                   Products
                 </Link>
@@ -41,7 +41,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/pricing"
-                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full"
                 >
                   Pricing
                 </Link>
@@ -51,7 +51,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/docs"
-                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full"
                 >
                   Docs
                 </Link>
@@ -61,7 +61,7 @@ export function Navbar() {
               <NavigationMenuLink asChild className="!rounded-full">
                 <Link
                   href="/blog"
-                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full hover:bg-white/60"
+                  className="text-foreground hover:text-accent transition-all px-4 py-2 rounded-full"
                 >
                   Blog
                 </Link>
