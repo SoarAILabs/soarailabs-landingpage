@@ -1,12 +1,223 @@
 ---
 title: Introducing Glide
 description: "Find out how you can use Glide to make your git problems less painful."
-date: "2025-11-05"
+date: "2025-11-21T19:00:00-05:00"
 author: "Amaan"
 ---
 
 # Introducting Glide
 
-Glide MCP is an MCP tool that solves two major issues we faced, and figured millions of developers around the world also face.
+Glide MCP is an MCP tool that solves two major issues we faced — and we think many developers around the world face too:
+
+1. Large, noisy commits that make history hard to read.
+2. Merge conflicts that slow development and introduce bugs.
+
+This post explains, in simple terms, what Glide does, how it uses a small helper service (`glide-helper`), and how we built the project. There are small code snippets and placeholders for images where it helps explain the flow.
+
+---
+
+## TL;DR
+
+- Glide splits big commits into smaller, semantic commits.
+- Glide helps resolve merge conflicts with AI-assisted suggestions.
+- Heavy LLM/embedding work is delegated to a companion REST service called `glide-helper`.
+- You can run the helper locally or point Glide at a hosted helper using environment variables.
 
 
+---
+
+## The problems we had
+
+Big projects often accumulate big diffs. Two pain points we kept hitting:
+
+- You change multiple unrelated things in one commit. Later, it's hard to understand why a specific file changed.
+- Merge conflicts take time to resolve correctly. Manual resolution is error-prone and slows the team.
+
+Glide aims to make these problems less painful by suggesting focused commits and by offering AI-assisted conflict resolutions.
+
+---
+
+## High-level architecture
+
+Glide is split into two parts:
+
+- `glide` — the MCP tool you run in your local IDE or codebase. It performs git operations, extracts diffs, detects conflicts, and applies edits.
+- `glide-helper` — a small REST service used for tasks that benefit from model inference or vector search (commit message generation, embeddings, and conflict resolution endpoints).
+
+This split keeps the MCP lightweight and lets the helper be scaled or swapped independently.
+
+Read why need Glide (MCP) & glide-helper(REST API) [here](#high-level-architecture).
+
+add architecture diagram here
+
+---
+
+## How Glide uses glide-helper
+
+Glide prefers to call the helper service when available. It reads environment variables to find it:
+
+```python
+# glide/src/mcp/app.py#L1-40
+GLIDE_HELPER_BASE_URL = os.getenv("GLIDE_HELPER_BASE_URL", "").rstrip("/")
+GLIDE_API_KEY = os.getenv("GLIDE_API_KEY", "")
+```
+
+When Glide needs commit suggestions, it POSTs per-file diffs to the helper:
+
+```python
+# glide/src/mcp/app.py#L200-320
+response = await client.post(
+    f"{GLIDE_HELPER_BASE_URL}/api/v1/split_commit",
+    json={"files": files_payload},
+    headers=headers or None,
+)
+```
+
+On the helper side, commit messages are created by calling an inference function with a system prompt that instructs the model to return a single concise conventional commit message:
+
+```python
+# glide-helper/app.py#L60-140
+system_prompt = """You are a senior engineer writing conventional commit messages...
+Output ONLY the commit message title, nothing else."""
+raw_response = await asyncio.wait_for(
+    complete(user_prompt, system=system_prompt, temperature=0.0),
+    timeout=30.0,
+)
+```
+
+If `GLIDE_HELPER_BASE_URL` is not set, Glide uses local fallback logic where available (like simpler heuristics).
+
+---
+
+## Walkthrough: split_commit
+
+What `split_commit` does (high level):
+
+1. Detect the git root.
+2. Collect staged, unstaged, and untracked file diffs.
+3. Build a payload of per-file diffs and POST to glide-helper's `/api/v1/split_commit`.
+4. Receive commit suggestions like `{"file": "...", "message": "feat(...): ..."}`
+5. Stage and commit each suggestion separately.
+
+Why this helps: instead of one big noisy commit, you get several focused commits that are much easier to understand, review, and revert.
+
+Example of the JSON Glide expects and returns (example output):
+
+```json
+// /dev/null/example-output.json#L1-30
+{
+  "commits": [
+    {"file": "auth/login.py", "message": "feat(auth): add session expiry check"},
+    {"file": "docs/README.md", "message": "docs(readme): add setup for auth"}
+  ]
+}
+```
+
+Placeholder image showing a split commit result:
+add split commit example image here 
+
+---
+
+## Walkthrough: resolve_conflict
+
+What `resolve_conflict` does (high level):
+
+1. Discover conflicted files (by reading git state and scanning files for conflict markers).
+2. Extract the conflict region(s).
+3. Try Glide-helper's `/api/v1/resolve_conflict` first — if present, send the conflict text.
+4. If the helper returns resolved code, format it into an edit snippet and apply it using our MorphLLM edit flow.
+5. Write the resulting file content back to disk and keep a record for easy revert.
+
+Glide writes the files immediately after applying the resolution, and provides `revert_conflict_resolution` so you can undo if needed.
+
+How Glide calls the helper for conflict resolution:
+
+```python
+# glide/src/mcp/app.py#L520-660
+response = await client.post(
+    f"{GLIDE_HELPER_BASE_URL}/api/v1/resolve_conflict",
+    json=payload,
+    headers=headers or None,
+)
+# then it reads response.json() and applies the resolved_code
+```
+
+If the helper is not available or fails, Glide falls back to a local `resolve_merge_conflict` routine.
+
+---
+
+## Configuration and running locally
+
+Important environment variables:
+
+- `GLIDE_HELPER_BASE_URL` — URL of the helper service (example: `http://localhost:8001`).
+- `GLIDE_API_KEY` — Optional API key header for the helper.
+
+> Note: You can also completely self host this yourself. Learn how to [self-host](https://example.com/self-hosting-guide).
+
+Example `.env` (placeholder):
+
+```json 
+// /dev/null/example.env#L1-10
+GLIDE_HELPER_BASE_URL=http://localhost:8001
+GLIDE_API_KEY=your_api_key_here
+```
+
+Run steps (summary):
+
+- Start `glide-helper` (it runs as a FastAPI/uvicorn app).
+- Run the Glide MCP tool in the repo (it uses the MCP transport — stdio).
+
+---
+
+## Design choices & future work
+
+Why this split?
+- Keep the developer-facing tool small and fast.
+- Delegate rate-limited or heavy inference work to a dedicated service.
+
+Trade-offs:
+- Separated responsibilities for MCP and REST API hosting.
+- Network timeouts and model hallucinations are possible; Glide includes fallbacks and error reporting.
+
+Future ideas:
+- Figuring out a way to integrate all functionality in one MCP server. Currently that's not possible due to us being opensource and handling authentication.
+- Improved conflict resolution that reasons across multiple hunks and files.
+
+---
+
+## Example flow (quick)
+
+1. Make changes in three different areas of the codebase.
+2. Stage them and in your IDE chat window, you can type something like:
+   - `call split_commit tool in glide-mcp` (the MCP tool)
+3. Glide posts per-file diffs to `glide-helper`, gets messages, and creates small commits.
+4. Inspect the history — it now contains focused commits.
+
+> If you want to revert any of the commmits made by Glide, you can review how many commits Glide made and just run: 
+```zsh
+git reset ~HEAD <number of commits made by Glide (Example: 3, 12, etc)>
+```
+
+Expected output example (already shown earlier) makes history easier to scan and **blame**.
+
+---
+
+## Wrap-up
+
+Glide helps you keep commits focused and speeds up conflict resolution. It does this by combining a lightweight MCP tool (`glide`) with a specialized helper service (`glide-helper`) for model and embedding work.
+
+If you want, try these next steps:
+- Run `glide-helper` locally and point `GLIDE_HELPER_BASE_URL` at it.
+- Try `glide split_commit` on a noisy branch.
+- Open issues or PRs in the repos to help improve prompts or add features.
+
+Thanks for reading — if you'd like, I can convert this into a shorter blog summary, or expand any section into a longer walkthrough with commands and real example diffs.
+
+
+---
+Credits & links
+
+- `Glide`: [Source](https://github.com/SoarAILabs/Glide-MCP)
+- `Glide-helper`: [Source](https://github.com/SoarAILabs/Glide-helper)
+- Contact / contribute: [Email](mailto:bilwarad@mail.uc.edu)
