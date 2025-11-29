@@ -199,33 +199,27 @@ export default function HomePage() {
             {/* Left Column */}
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Free & Open Source
+                We love our community!
               </h2>
               <p className="text-lg text-muted-foreground">
-                All parts of Glide MCP are open source, including online
-                services. You can self-host Glide MCP and use your own instance
-                in your IDE or coding agent like Claude Code or Warp.
-                <br />
-                <br />
-                If you don't want to self-host, you can use our fast &amp; cheap
-                inference. We plan on offering a free tier for personal use and
-                a paid tier for professionals and teams.
-                <br />
-                <br />
-                Go check out our{" "}
-                <span className="underline underline-offset-2 hover:cursor-pointer">
-                  <Link
-                    href="https://github.com/SoarAILabs/glide"
-                    target="_blank"
-                  >
-                    Github
-                  </Link>
-                </span>{" "}
-                and feel free to contribute or annoy us about feature requests.
-                <br />
-                <br />
-                We want to build this for developers, with developers.
+                Join our Discord to connect with the team and other users.
+                You’ll get quick support, early previews, community tips, and a
+                place to share what you’re building. New members are always
+                welcome.
               </p>
+              <ul className="text-sm text-muted-foreground mt-3 list-disc pl-5 space-y-1">
+                <li>Announcements, previews, and roadmap discussions</li>
+                <li>Showcase your projects and get feedback</li>
+              </ul>
+              <a
+                href="https://discord.gg/zaYsTEqh"
+                className="inline-block mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 focus:outline-none"
+                aria-label="Join our Discord"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Join our Discord
+              </a>
             </div>
             {/* Right Column */}
             <div>
